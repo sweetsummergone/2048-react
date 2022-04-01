@@ -1,37 +1,45 @@
-import { useEffect, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import Cell from "./Cell";
 
 function Gamefield() {
-    const [field, setField] = useState([[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]]);
+    const fieldReducer = (state, action) => {
+        switch(action.type) {
+            case "modify": {
+                return [...state.slice(0, action.row), 
+                    [
+                        ...state[action.row].slice(0, action.cell),
+                        action.value,
+                        ...state[action.row].slice(action.cell + 1)
+                    ],
+                    ...state.slice(action.row + 1)];
+            }
+
+            default:
+                return state;
+        }
+    }
+
+    const [field, dispatch] = useReducer(fieldReducer, [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]]);
     const [zeros, setZeros] = useState(16);
 
-    function generateCell() {
+    function getEmptyCell() {        
         const randomRowIndex = Math.floor(Math.random() * field.length);
         const randomCellIndex = Math.floor(Math.random() * field[0].length);
 
         if (field[randomRowIndex][randomCellIndex] === 0) {
-            return [...field.slice(0, randomRowIndex), 
-                    [
-                        ...field[randomRowIndex].slice(0, randomCellIndex),
-                        2,
-                        ...field[randomRowIndex].slice(randomCellIndex + 1)
-                    ],
-                    ...field.slice(randomRowIndex + 1)];
-        } else {
-            if(zeros !== 0) {
-                generateCell();
-            }
+            return [randomRowIndex, randomCellIndex];
         }
+        return getEmptyCell();
     }
 
-    function addTwo() {
-        setField(generateCell());
-        setZeros(zeros - 1);
+    function generateNewCell() {
+        const [row, cell] = getEmptyCell();
+        dispatch({type: "modify", row: row, cell: cell, value: 2});
     }
 
     useEffect(() => {
-        setField(generateCell());
-        setZeros(zeros - 1);
+        generateNewCell();
+        generateNewCell();
     }, []);
 
     return (
@@ -43,7 +51,9 @@ function Gamefield() {
                     ))}
                 </div>
             ))}
-            <button onClick={addTwo}>Press me to generate sometnihg</button>
+            <button onClick={ () => {
+                generateNewCell();
+            }}>Press me to generate something</button>
         </div>
     );
 }
