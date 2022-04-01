@@ -74,6 +74,7 @@ function Gamefield() {
     function moveCells(direction) {
         let newCellFlag = false;
         const modifiedArray = [...field];
+        const merged = [];
         switch (direction) {
             case "Down":
                 for (let i = 0; i < 3; i++) {
@@ -83,9 +84,10 @@ function Gamefield() {
                             modifiedArray[i][j] = 0;
                             newCellFlag = true;
                         }
-                        else if (modifiedArray[i][j] !== 0 && modifiedArray[i+1][j] === modifiedArray[i][j]) {
+                        else if (!merged.includes(i) && modifiedArray[i][j] !== 0 && modifiedArray[i+1][j] === modifiedArray[i][j]) {
                             modifiedArray[i+1][j] = modifiedArray[i][j] * 2;
                             modifiedArray[i][j] = 0;
+                            merged.push(i+1);
                             newCellFlag = true;
                         }
                     }
@@ -104,9 +106,10 @@ function Gamefield() {
                             modifiedArray[i][j] = 0;
                             newCellFlag = true;
                         }
-                        else if (modifiedArray[i][j] !== 0 && modifiedArray[i-1][j] === modifiedArray[i][j]) {
+                        else if (!merged.includes(i) && modifiedArray[i][j] !== 0 && modifiedArray[i-1][j] === modifiedArray[i][j]) {
                             modifiedArray[i-1][j] = modifiedArray[i][j] * 2;
                             modifiedArray[i][j] = 0;
+                            merged.push(i-1);
                             newCellFlag = true;
                         }
                     }
@@ -125,9 +128,10 @@ function Gamefield() {
                             modifiedArray[i][j] = 0;
                             newCellFlag = true;
                         }
-                        else if (modifiedArray[i][j] !== 0 && modifiedArray[i][j-1] === modifiedArray[i][j]) {
+                        else if (!merged.includes(j) && modifiedArray[i][j] !== 0 && modifiedArray[i][j-1] === modifiedArray[i][j]) {
                             modifiedArray[i][j-1] = modifiedArray[i][j] * 2;
                             modifiedArray[i][j] = 0;
+                            merged.push(j-1);
                             newCellFlag = true;
                         }
                     }
@@ -139,16 +143,17 @@ function Gamefield() {
                 }
                 break;
             case "Right":
-                for(let i = 0; i <= 3;i++) {
+                for(let i = 0; i <= 3; i++) {
                     for (let j = 0; j < 3; j++) {
                         if (modifiedArray[i][j] !== 0 && modifiedArray[i][j+1] === 0) {
                             modifiedArray[i][j+1] = modifiedArray[i][j];
                             modifiedArray[i][j] = 0;
                             newCellFlag = true;
                         }
-                        else if (modifiedArray[i][j] !== 0 && modifiedArray[i][j+1] === modifiedArray[i][j]) {
+                        else if (!merged.includes(j) && modifiedArray[i][j] !== 0 && modifiedArray[i][j+1] === modifiedArray[i][j]) {
                             modifiedArray[i][j+1] = modifiedArray[i][j] * 2;
                             modifiedArray[i][j] = 0;
+                            merged.push(j+1);
                             newCellFlag = true;
                         }
                     }
