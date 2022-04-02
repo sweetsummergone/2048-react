@@ -74,13 +74,13 @@ function Gamefield() {
 
     function generateTestField() {
         // Full field test
-        let a = 2;
-        for (let i = 0; i <= 3; i++) {
-            for (let j = 0; j <= 3; j++) {
-                dispatch({type: "addNewCell", row: i, cell: j, value: a}); 
-                a *= 2;
-            }
-        }
+        // let a = 2;
+        // for (let i = 0; i <= 3; i++) {
+        //     for (let j = 0; j <= 3; j++) {
+        //         dispatch({type: "addNewCell", row: i, cell: j, value: a}); 
+        //         a *= 2;
+        //     }
+        // }
 
         // New cell test (to down) - shouldn't arrive
         // dispatch({type: "addNewCell", row: 2, cell: 0, value: 8});
@@ -296,7 +296,7 @@ function Gamefield() {
             {field.map((row, x) => (
                 <div className="gamefield__row" key={x}>
                     {row.map((value, y) => (
-                        <Cell key={x+""+y} value={value}/>
+                        <Cell key={x+""+y} value={value} />
                     ))}
                 </div>
             ))}
