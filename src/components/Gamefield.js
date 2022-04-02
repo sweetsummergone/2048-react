@@ -33,26 +33,26 @@ function Gamefield() {
             case "S":
                 moveCells("Down");
                 break;
-            case "Up": // IE/Edge specific value
+            case "Up":
             case "ArrowUp":
             case "w":
             case "W":
                 moveCells("Up");
                 break;
-            case "Left": // IE/Edge specific value
+            case "Left":
             case "ArrowLeft":
             case "a":
             case "A":
                 moveCells("Left");
                 break;
-            case "Right": // IE/Edge specific value
+            case "Right":
             case "ArrowRight":
             case "d":
             case "D":
                 moveCells("Right");
                 break;
             default:
-                return; // Quit when this doesn't handle the key event.
+                return;
         }
     })
 
@@ -69,101 +69,212 @@ function Gamefield() {
     function generateNewCell() {
         const [row, cell] = getEmptyCell();
         dispatch({type: "addNewCell", row: row, cell: cell, value: 2});
+        console.log(zeros);
+    }
+
+    function generateTestField() {
+        // Full field test
+        let a = 2;
+        for (let i = 0; i <= 3; i++) {
+            for (let j = 0; j <= 3; j++) {
+                dispatch({type: "addNewCell", row: i, cell: j, value: a}); 
+                a *= 2;
+            }
+        }
+
+        // New cell test (to down) - shouldn't arrive
+        // dispatch({type: "addNewCell", row: 2, cell: 0, value: 8});
+        // dispatch({type: "addNewCell", row: 3, cell: 0, value: 16});
+
+        // New cell test (to left) - shouldn't arrive
+        // dispatch({type: "addNewCell", row: 0, cell: 0, value: 16});
+
+        // Far test
+        // dispatch({type: "addNewCell", row: 2, cell: 3, value: 16});
+
+        // Two different values far test
+        // dispatch({type: "addNewCell", row: 2, cell: 1, value: 16});
+        // dispatch({type: "addNewCell", row: 2, cell: 2, value: 16});
+        // dispatch({type: "addNewCell", row: 2, cell: 3, value: 32});      
+
+        // Neighbors test
+        // dispatch({type: "addNewCell", row: 3, cell: 0, value: 16});
+        // dispatch({type: "addNewCell", row: 3, cell: 1, value: 16});
+        // dispatch({type: "addNewCell", row: 3, cell: 2, value: 2});
+        // dispatch({type: "addNewCell", row: 3, cell: 3, value: 2});
     }
 
     function moveCells(direction) {
         let newCellFlag = false;
         const modifiedArray = [...field];
-        const merged = [];
+
         switch (direction) {
             case "Down":
-                for (let i = 0; i < 3; i++) {
-                    for (let j = 0; j <= 3; j++) {
-                        if (modifiedArray[i][j] !== 0 && modifiedArray[i+1][j] === 0) {
-                            modifiedArray[i+1][j] = modifiedArray[i][j];
-                            modifiedArray[i][j] = 0;
-                            newCellFlag = true;
+                for (let i = 0; i <= 3; i++) {
+                    let zerosCounter = 0;
+                    let currentValue = 0;
+                    let currentRow = 0;
+                    let currentCell = 0;
+                    for (let j = 3; j >= 0; j--) {  
+                        if (modifiedArray[j][i] === 0) {
+                            zerosCounter += 1;
                         }
-                        else if (!merged.includes(i) && modifiedArray[i][j] !== 0 && modifiedArray[i+1][j] === modifiedArray[i][j]) {
-                            modifiedArray[i+1][j] = modifiedArray[i][j] * 2;
-                            modifiedArray[i][j] = 0;
-                            merged.push(i+1);
-                            newCellFlag = true;
+                        else if (currentValue === 0 && modifiedArray[j][i] !== 0) {
+                            currentValue = modifiedArray[j][i];
+                            modifiedArray[j + zerosCounter][i] = currentValue;
+                            if (zerosCounter !== 0) {
+                                modifiedArray[j][i] = 0;
+                                newCellFlag = true;
+                            }
+                            currentRow = j + zerosCounter;
+                            currentCell = i;
+                        }
+                        else if (currentValue !== 0 && modifiedArray[j][i] !== 0) {
+                            if (currentValue === modifiedArray[j][i]) {
+                                modifiedArray[currentRow][currentCell] *= 2;
+                                modifiedArray[j][i] = 0;
+                                zerosCounter += 1;
+                                newCellFlag = true;
+                            } else {
+                                currentValue = modifiedArray[j][i];
+                                currentRow = j + zerosCounter;
+                                currentCell = i;
+                                modifiedArray[j + zerosCounter][i] = currentValue;
+                                if (j !== j + zerosCounter) {
+                                    modifiedArray[j][i] = 0;
+                                    newCellFlag = true;
+                                }
+                            }
                         }
                     }
-                }
-                dispatch("setup", {newField: modifiedArray});
-                if (newCellFlag === true){
-                    generateNewCell();
-                    newCellFlag = false;
                 }
                 break;
             case "Up":
-                for (let i = 3; i > 0; i--) {
-                    for (let j = 3; j >= 0; j--) {
-                        if (modifiedArray[i][j] !== 0 && modifiedArray[i-1][j] === 0) {
-                            modifiedArray[i-1][j] = modifiedArray[i][j];
-                            modifiedArray[i][j] = 0;
-                            newCellFlag = true;
+                for (let i = 0; i <= 3; i++) {
+                    let zerosCounter = 0;
+                    let currentValue = 0;
+                    let currentRow = 0;
+                    let currentCell = 0;
+                    for (let j = 0; j <= 3; j++) {  
+                        if (modifiedArray[j][i] === 0) {
+                            zerosCounter += 1;
                         }
-                        else if (!merged.includes(i) && modifiedArray[i][j] !== 0 && modifiedArray[i-1][j] === modifiedArray[i][j]) {
-                            modifiedArray[i-1][j] = modifiedArray[i][j] * 2;
-                            modifiedArray[i][j] = 0;
-                            merged.push(i-1);
-                            newCellFlag = true;
+                        else if (currentValue === 0 && modifiedArray[j][i] !== 0) {
+                            currentValue = modifiedArray[j][i];
+                            modifiedArray[j - zerosCounter][i] = currentValue;
+                            if (zerosCounter !== 0) {
+                                modifiedArray[j][i] = 0;
+                                newCellFlag = true;
+                            }
+                            currentRow = j - zerosCounter;
+                            currentCell = i;
+                        }
+                        else if (currentValue !== 0 && modifiedArray[j][i] !== 0) {
+                            if (currentValue === modifiedArray[j][i]) {
+                                modifiedArray[currentRow][currentCell] *= 2;
+                                modifiedArray[j][i] = 0;
+                                zerosCounter += 1;
+                                newCellFlag = true;
+                            } else {
+                                currentValue = modifiedArray[j][i];
+                                currentRow = j - zerosCounter;
+                                currentCell = i;
+                                modifiedArray[j - zerosCounter][i] = currentValue;
+                                if (j !== j - zerosCounter) {
+                                    modifiedArray[j][i] = 0;
+                                    newCellFlag = true;
+                                }
+                            }
                         }
                     }
-                }
-                dispatch("setup", {newField: modifiedArray});
-                if(newCellFlag === true){
-                    generateNewCell();
-                    newCellFlag = false;
                 }
                 break;
             case "Left":
                 for (let i = 0; i <= 3; i++) {
-                    for (let j = 3; j > 0; j--) {
-                        if (modifiedArray[i][j] !== 0 && modifiedArray[i][j-1] === 0) {
-                            modifiedArray[i][j-1] = modifiedArray[i][j];
-                            modifiedArray[i][j] = 0;
-                            newCellFlag = true;
+                    let zerosCounter = 0;
+                    let currentValue = 0;
+                    let currentRow = 0;
+                    let currentCell = 0;
+                    for (let j = 0; j <= 3; j++) {  
+                        if (modifiedArray[i][j] === 0) {
+                            zerosCounter += 1;
                         }
-                        else if (!merged.includes(j) && modifiedArray[i][j] !== 0 && modifiedArray[i][j-1] === modifiedArray[i][j]) {
-                            modifiedArray[i][j-1] = modifiedArray[i][j] * 2;
-                            modifiedArray[i][j] = 0;
-                            merged.push(j-1);
-                            newCellFlag = true;
+                        else if (currentValue === 0 && modifiedArray[i][j] !== 0) {
+                            currentValue = modifiedArray[i][j];
+                            modifiedArray[i][j - zerosCounter] = currentValue;
+                            if (zerosCounter !== 0) {
+                                modifiedArray[i][j] = 0;
+                                newCellFlag = true;
+                            }
+                            currentRow = i;
+                            currentCell = j - zerosCounter;
+                        }
+                        else if (currentValue !== 0 && modifiedArray[i][j] !== 0) {
+                            if (currentValue === modifiedArray[i][j]) {
+                                modifiedArray[currentRow][currentCell] *= 2;
+                                modifiedArray[i][j] = 0;
+                                zerosCounter += 1;
+                                newCellFlag = true;
+                            } else {
+                                currentValue = modifiedArray[i][j];
+                                currentRow = i;
+                                currentCell = j - zerosCounter;
+                                modifiedArray[i][j - zerosCounter] = currentValue;
+                                if (j !== j - zerosCounter) {
+                                    modifiedArray[i][j] = 0;
+                                    newCellFlag = true;
+                                }
+                            }
                         }
                     }
-                }
-                dispatch("setup", {newField: modifiedArray});
-                if(newCellFlag === true){
-                    generateNewCell();
-                    newCellFlag = false;
                 }
                 break;
             case "Right":
-                for(let i = 0; i <= 3; i++) {
-                    for (let j = 0; j < 3; j++) {
-                        if (modifiedArray[i][j] !== 0 && modifiedArray[i][j+1] === 0) {
-                            modifiedArray[i][j+1] = modifiedArray[i][j];
-                            modifiedArray[i][j] = 0;
-                            newCellFlag = true;
+                for (let i = 0; i <= 3; i++) {
+                    let zerosCounter = 0;
+                    let currentValue = 0;
+                    let currentRow = 0;
+                    let currentCell = 0;
+                    for (let j = 3; j >= 0; j--) {  
+                        if (modifiedArray[i][j] === 0) {
+                            zerosCounter += 1;
                         }
-                        else if (!merged.includes(j) && modifiedArray[i][j] !== 0 && modifiedArray[i][j+1] === modifiedArray[i][j]) {
-                            modifiedArray[i][j+1] = modifiedArray[i][j] * 2;
-                            modifiedArray[i][j] = 0;
-                            merged.push(j+1);
-                            newCellFlag = true;
+                        else if (currentValue === 0 && modifiedArray[i][j] !== 0) {
+                            currentValue = modifiedArray[i][j];
+                            modifiedArray[i][j + zerosCounter] = currentValue;
+                            if (zerosCounter !== 0) {
+                                modifiedArray[i][j] = 0;
+                                newCellFlag = true;
+                            }
+                            currentRow = i;
+                            currentCell = j + zerosCounter;
+                        }
+                        else if (currentValue !== 0 && modifiedArray[i][j] !== 0) {
+                            if (currentValue === modifiedArray[i][j]) {
+                                modifiedArray[currentRow][currentCell] *= 2;
+                                modifiedArray[i][j] = 0;
+                                zerosCounter += 1;
+                                newCellFlag = true;
+                            } else {
+                                currentValue = modifiedArray[i][j];
+                                currentRow = i;
+                                currentCell = j + zerosCounter;
+                                modifiedArray[i][j + zerosCounter] = currentValue;
+                                if (j !== j - zerosCounter) {
+                                    modifiedArray[i][j] = 0;
+                                    newCellFlag = true;
+                                }
+                            }
                         }
                     }
                 }
-                dispatch("setup", {newField: modifiedArray});
-                if (newCellFlag === true){
-                    generateNewCell();
-                    newCellFlag = false;
-                }
                 break;
+        }
+        
+        dispatch("setup", {newField: modifiedArray});
+        if(newCellFlag === true){
+            generateNewCell();
+            newCellFlag = false;
         }
     }
     
@@ -185,7 +296,7 @@ function Gamefield() {
             {field.map((row, x) => (
                 <div className="gamefield__row" key={x}>
                     {row.map((value, y) => (
-                        <Cell key={y} value={value}/>
+                        <Cell key={x+""+y} value={value}/>
                     ))}
                 </div>
             ))}

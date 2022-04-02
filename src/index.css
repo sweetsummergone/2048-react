@@ -97,35 +97,31 @@
 }
 
 .cell__4 {
-    background-color: papayawhip;
+    background-color: #FFCF00;
 }
 
 .cell__8 {
-    background-color: peachpuff;
+    background-color: #EEBA0B;
 }
 
 .cell__16 {
-    background-color :palegoldenrod;
-}
-
-.cell__16 {
-    background-color:orange;
+    background-color: #EE6123;
 }
 
 .cell__32 {
-    background-color : orangered;
+    background-color: tomato;
 }
 
 .cell__64 {
-    background-color: palevioletred;
+    background-color : orangered;
 }
 
 .cell__128 {
     background-color: tomato;
 }
 
-.cell_256 {
-    background-color: burlywood;
+.cell__256 {
+    background-color: #C36F09;
 }
 
 .cell__512 {
@@ -142,4 +138,20 @@
 
 .cell__4096 {
     background-color: firebrick;
+}
+
+.cell__8192 {
+    background-color: #931621;
+}
+
+.cell__16384 {
+    background-color: #710000;
+}
+
+.cell__32768 {
+    background-color: #BC4B51;
+}
+
+.cell__65536 {
+    background-color: #F76C5E;
 }
