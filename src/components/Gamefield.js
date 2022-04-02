@@ -69,7 +69,6 @@ function Gamefield() {
     function generateNewCell() {
         const [row, cell] = getEmptyCell();
         dispatch({type: "addNewCell", row: row, cell: cell, value: 2});
-        console.log(zeros);
     }
 
     function generateTestField() {
