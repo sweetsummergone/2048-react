@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useReducer } from "react";
-import { getEmptyCell } from "../modules/modules";
+import { useCallback, useEffect, useReducer, useState } from "react";
+import { getEmptyCell, getDirection } from "../modules/modules";
 import fieldReducer from "../reducers/field";
 import Cell from "./Cell";
 
@@ -10,18 +10,17 @@ function Gamefield() {
             [{row: 2, cell: 0, value: 0, step: 0}, {row: 2, cell: 1, value: 0, step: 0}, {row: 2, cell: 2, value: 0, step: 0}, {row: 2, cell: 3, value: 0, step: 0}],
             [{row: 3, cell: 0, value: 0, step: 0}, {row: 3, cell: 1, value: 0, step: 0}, {row: 3, cell: 2, value: 0, step: 0}, {row: 3, cell: 3, value: 0, step: 0}]
         ]);
+    
+    const [direction, setDirection] = useState("appear");
 
     const handleMoveCells = useCallback(event => {
+        setDirection(getDirection(event.key));
         dispatch({type: "moveCells", direction: event.key});
     });
 
     function generateNewCell() {
         const [row, cell] = getEmptyCell(field);
         dispatch({type: "addNewCell", row: row, cell: cell, value: 2});
-    }
-
-    function animate() {
-        dispatch({type: "moveCells", direction: "bottom"});
     }
 
     useEffect(() => {
@@ -41,7 +40,7 @@ function Gamefield() {
             {field.map((row, x) => (
                 <div className="gamefield__row" key={x}>
                     {row.map((element, y) => (
-                        <Cell key={x+""+y} value={element["value"]}></Cell>
+                        <Cell key={x+""+y} value={element["value"]} step={element["step"]} direction={direction}></Cell>
                     ))}
                 </div>
             ))}

@@ -19,8 +19,10 @@ export function moveCells(field, direction) {
                     else if (currentValue === 0 && modifiedObject[j][i]["value"] !== 0) {
                         currentValue = modifiedObject[j][i]["value"];
                         modifiedObject[j + zerosCounter][i]["value"] = currentValue;
+                        modifiedObject[j + zerosCounter][i]["step"] = zerosCounter;
                         if (zerosCounter !== 0) {
                             modifiedObject[j][i]["value"] = 0;
+                            modifiedObject[j][i]["step"] = 0;
                             newCellFlag = true;
                         }
                         currentRow = j + zerosCounter;
@@ -28,17 +30,21 @@ export function moveCells(field, direction) {
                     }
                     else if (currentValue !== 0 && modifiedObject[j][i]["value"] !== 0) {
                         if (currentValue === modifiedObject[j][i]["value"]) {
-                            modifiedObject[currentRow][currentCell]["value"] *= 2;
-                            modifiedObject[j][i]["value"] = 0;
                             zerosCounter += 1;
+                            modifiedObject[j][i]["value"] = 0;
+                            modifiedObject[j][i]["step"] = 0;
+                            modifiedObject[currentRow][currentCell]["value"] *= 2;
+                            modifiedObject[currentRow][currentCell]["step"] = zerosCounter;
                             newCellFlag = true;
                         } else {
                             currentValue = modifiedObject[j][i]["value"];
                             currentRow = j + zerosCounter;
                             currentCell = i;
                             modifiedObject[j + zerosCounter][i]["value"] = currentValue;
+                            modifiedObject[j + zerosCounter][i]["step"] = zerosCounter;
                             if (j !== j + zerosCounter) {
                                 modifiedObject[j][i]["value"] = 0;
+                                modifiedObject[j][i]["step"] = 0;
                                 newCellFlag = true;
                             }
                         }
@@ -62,8 +68,10 @@ export function moveCells(field, direction) {
                     else if (currentValue === 0 && modifiedObject[j][i]["value"] !== 0) {
                         currentValue = modifiedObject[j][i]["value"];
                         modifiedObject[j - zerosCounter][i]["value"] = currentValue;
+                        modifiedObject[j - zerosCounter][i]["step"] = zerosCounter;
                         if (zerosCounter !== 0) {
                             modifiedObject[j][i]["value"] = 0;
+                            modifiedObject[j][i]["step"] = 0;
                             newCellFlag = true;
                         }
                         currentRow = j - zerosCounter;
@@ -71,17 +79,21 @@ export function moveCells(field, direction) {
                     }
                     else if (currentValue !== 0 && modifiedObject[j][i]["value"] !== 0) {
                         if (currentValue === modifiedObject[j][i]["value"]) {
-                            modifiedObject[currentRow][currentCell]["value"] *= 2;
-                            modifiedObject[j][i]["value"] = 0;
                             zerosCounter += 1;
+                            modifiedObject[j][i]["value"] = 0;
+                            modifiedObject[j][i]["step"] = 0;
+                            modifiedObject[currentRow][currentCell]["value"] *= 2;
+                            modifiedObject[currentRow][currentCell]["step"] = zerosCounter;
                             newCellFlag = true;
                         } else {
                             currentValue = modifiedObject[j][i]["value"];
                             currentRow = j - zerosCounter;
                             currentCell = i;
                             modifiedObject[j - zerosCounter][i]["value"] = currentValue;
+                            modifiedObject[j - zerosCounter][i]["step"] = zerosCounter;
                             if (j !== j - zerosCounter) {
                                 modifiedObject[j][i]["value"] = 0;
+                                modifiedObject[j][i]["step"] = 0;
                                 newCellFlag = true;
                             }
                         }
@@ -105,8 +117,10 @@ export function moveCells(field, direction) {
                     else if (currentValue === 0 && modifiedObject[i][j]["value"] !== 0) {
                         currentValue = modifiedObject[i][j]["value"];
                         modifiedObject[i][j - zerosCounter]["value"] = currentValue;
+                        modifiedObject[i][j - zerosCounter]["step"] = zerosCounter;
                         if (zerosCounter !== 0) {
                             modifiedObject[i][j]["value"] = 0;
+                            modifiedObject[i][j]["step"] = 0;
                             newCellFlag = true;
                         }
                         currentRow = i;
@@ -114,17 +128,21 @@ export function moveCells(field, direction) {
                     }
                     else if (currentValue !== 0 && modifiedObject[i][j]["value"] !== 0) {
                         if (currentValue === modifiedObject[i][j]["value"]) {
-                            modifiedObject[currentRow][currentCell]["value"] *= 2;
-                            modifiedObject[i][j]["value"] = 0;
                             zerosCounter += 1;
+                            modifiedObject[i][j]["value"] = 0;
+                            modifiedObject[i][j]["step"] = 0;
+                            modifiedObject[currentRow][currentCell]["value"] *= 2;
+                            modifiedObject[currentRow][currentCell]["step"] = zerosCounter;
                             newCellFlag = true;
                         } else {
                             currentValue = modifiedObject[i][j]["value"];
                             currentRow = i;
                             currentCell = j - zerosCounter;
                             modifiedObject[i][j - zerosCounter]["value"] = currentValue;
+                            modifiedObject[i][j - zerosCounter]["step"] = zerosCounter;
                             if (j !== j - zerosCounter) {
                                 modifiedObject[i][j]["value"] = 0;
+                                modifiedObject[i][j]["step"] = 0;
                                 newCellFlag = true;            
                             }
                         }
@@ -148,8 +166,10 @@ export function moveCells(field, direction) {
                     else if (currentValue === 0 && modifiedObject[i][j]["value"] !== 0) {
                         currentValue = modifiedObject[i][j]["value"];
                         modifiedObject[i][j + zerosCounter]["value"] = currentValue;
+                        modifiedObject[i][j + zerosCounter]["step"] = zerosCounter;
                         if (zerosCounter !== 0) {
                             modifiedObject[i][j]["value"] = 0;
+                            modifiedObject[i][j]["step"] = 0;
                             newCellFlag = true;
                         }
                         currentRow = i;
@@ -157,17 +177,21 @@ export function moveCells(field, direction) {
                     }
                     else if (currentValue !== 0 && modifiedObject[i][j]["value"] !== 0) {
                         if (currentValue === modifiedObject[i][j]["value"]) {
-                            modifiedObject[currentRow][currentCell]["value"] *= 2;
-                            modifiedObject[i][j]["value"] = 0;
                             zerosCounter += 1;
+                            modifiedObject[i][j]["value"] = 0;
+                            modifiedObject[i][j]["step"] = 0;
+                            modifiedObject[currentRow][currentCell]["value"] *= 2;
+                            modifiedObject[currentRow][currentCell]["step"] = zerosCounter;
                             newCellFlag = true;
                         } else {
                             currentValue = modifiedObject[i][j]["value"];
                             currentRow = i;
                             currentCell = j + zerosCounter;
                             modifiedObject[i][j + zerosCounter]["value"] = currentValue;
+                            modifiedObject[i][j + zerosCounter]["step"] = zerosCounter;
                             if (j !== j - zerosCounter) {
                                 modifiedObject[i][j]["value"] = 0;
+                                modifiedObject[i][j]["step"] = 0;
                                 newCellFlag = true;
                             }
                         }
@@ -212,4 +236,31 @@ export function addNewCell(field, row, cell, value) {
         ],
         ...field.slice(row + 1)
     ]
+}
+
+export function getDirection(key) {
+    switch (key) {
+        case "Down":
+        case "ArrowDown":
+        case "s":
+        case "S":
+            return "bot";
+        case "Up":
+        case "ArrowUp":
+        case "w":
+        case "W":
+            return "up";
+        case "Left":
+        case "ArrowLeft":
+        case "a":
+        case "A":
+            return "left";
+        case "Right":
+        case "ArrowRight":
+        case "d":
+        case "D":
+            return "right";
+        default:
+            return null;
+    }
 }

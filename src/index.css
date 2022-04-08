@@ -1,5 +1,6 @@
 @import url("vendor/fonts.css");
 @import url("vendor/normalize.css");
+@import url("./animations.css");
 
 .page {
     min-width: 100vw;
