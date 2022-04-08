@@ -1,6 +1,6 @@
 export function moveCells(field, direction) {
     let newCellFlag = false;
-    const modifiedArray = [...field];
+    const modifiedObject = JSON.parse(JSON.stringify(field));;
 
     switch (direction) {
         case "Down": // IE/Edge specific value
@@ -13,32 +13,32 @@ export function moveCells(field, direction) {
                 let currentRow = 0;
                 let currentCell = 0;
                 for (let j = 3; j >= 0; j--) {  
-                    if (modifiedArray[j][i] === 0) {
+                    if (modifiedObject[j][i]["value"] === 0) {
                         zerosCounter += 1;
                     }
-                    else if (currentValue === 0 && modifiedArray[j][i] !== 0) {
-                        currentValue = modifiedArray[j][i];
-                        modifiedArray[j + zerosCounter][i] = currentValue;
+                    else if (currentValue === 0 && modifiedObject[j][i]["value"] !== 0) {
+                        currentValue = modifiedObject[j][i]["value"];
+                        modifiedObject[j + zerosCounter][i]["value"] = currentValue;
                         if (zerosCounter !== 0) {
-                            modifiedArray[j][i] = 0;
+                            modifiedObject[j][i]["value"] = 0;
                             newCellFlag = true;
                         }
                         currentRow = j + zerosCounter;
                         currentCell = i;
                     }
-                    else if (currentValue !== 0 && modifiedArray[j][i] !== 0) {
-                        if (currentValue === modifiedArray[j][i]) {
-                            modifiedArray[currentRow][currentCell] *= 2;
-                            modifiedArray[j][i] = 0;
+                    else if (currentValue !== 0 && modifiedObject[j][i]["value"] !== 0) {
+                        if (currentValue === modifiedObject[j][i]["value"]) {
+                            modifiedObject[currentRow][currentCell]["value"] *= 2;
+                            modifiedObject[j][i]["value"] = 0;
                             zerosCounter += 1;
                             newCellFlag = true;
                         } else {
-                            currentValue = modifiedArray[j][i];
+                            currentValue = modifiedObject[j][i]["value"];
                             currentRow = j + zerosCounter;
                             currentCell = i;
-                            modifiedArray[j + zerosCounter][i] = currentValue;
+                            modifiedObject[j + zerosCounter][i]["value"] = currentValue;
                             if (j !== j + zerosCounter) {
-                                modifiedArray[j][i] = 0;
+                                modifiedObject[j][i]["value"] = 0;
                                 newCellFlag = true;
                             }
                         }
@@ -56,32 +56,32 @@ export function moveCells(field, direction) {
                 let currentRow = 0;
                 let currentCell = 0;
                 for (let j = 0; j <= 3; j++) {  
-                    if (modifiedArray[j][i] === 0) {
+                    if (modifiedObject[j][i]["value"] === 0) {
                         zerosCounter += 1;
                     }
-                    else if (currentValue === 0 && modifiedArray[j][i] !== 0) {
-                        currentValue = modifiedArray[j][i];
-                        modifiedArray[j - zerosCounter][i] = currentValue;
+                    else if (currentValue === 0 && modifiedObject[j][i]["value"] !== 0) {
+                        currentValue = modifiedObject[j][i]["value"];
+                        modifiedObject[j - zerosCounter][i]["value"] = currentValue;
                         if (zerosCounter !== 0) {
-                            modifiedArray[j][i] = 0;
+                            modifiedObject[j][i]["value"] = 0;
                             newCellFlag = true;
                         }
                         currentRow = j - zerosCounter;
                         currentCell = i;
                     }
-                    else if (currentValue !== 0 && modifiedArray[j][i] !== 0) {
-                        if (currentValue === modifiedArray[j][i]) {
-                            modifiedArray[currentRow][currentCell] *= 2;
-                            modifiedArray[j][i] = 0;
+                    else if (currentValue !== 0 && modifiedObject[j][i]["value"] !== 0) {
+                        if (currentValue === modifiedObject[j][i]["value"]) {
+                            modifiedObject[currentRow][currentCell]["value"] *= 2;
+                            modifiedObject[j][i]["value"] = 0;
                             zerosCounter += 1;
                             newCellFlag = true;
                         } else {
-                            currentValue = modifiedArray[j][i];
+                            currentValue = modifiedObject[j][i]["value"];
                             currentRow = j - zerosCounter;
                             currentCell = i;
-                            modifiedArray[j - zerosCounter][i] = currentValue;
+                            modifiedObject[j - zerosCounter][i]["value"] = currentValue;
                             if (j !== j - zerosCounter) {
-                                modifiedArray[j][i] = 0;
+                                modifiedObject[j][i]["value"] = 0;
                                 newCellFlag = true;
                             }
                         }
@@ -99,33 +99,33 @@ export function moveCells(field, direction) {
                 let currentRow = 0;
                 let currentCell = 0;
                 for (let j = 0; j <= 3; j++) {  
-                    if (modifiedArray[i][j] === 0) {
+                    if (modifiedObject[i][j]["value"] === 0) {
                         zerosCounter += 1;
                     }
-                    else if (currentValue === 0 && modifiedArray[i][j] !== 0) {
-                        currentValue = modifiedArray[i][j];
-                        modifiedArray[i][j - zerosCounter] = currentValue;
+                    else if (currentValue === 0 && modifiedObject[i][j]["value"] !== 0) {
+                        currentValue = modifiedObject[i][j]["value"];
+                        modifiedObject[i][j - zerosCounter]["value"] = currentValue;
                         if (zerosCounter !== 0) {
-                            modifiedArray[i][j] = 0;
+                            modifiedObject[i][j]["value"] = 0;
                             newCellFlag = true;
                         }
                         currentRow = i;
                         currentCell = j - zerosCounter;
                     }
-                    else if (currentValue !== 0 && modifiedArray[i][j] !== 0) {
-                        if (currentValue === modifiedArray[i][j]) {
-                            modifiedArray[currentRow][currentCell] *= 2;
-                            modifiedArray[i][j] = 0;
+                    else if (currentValue !== 0 && modifiedObject[i][j]["value"] !== 0) {
+                        if (currentValue === modifiedObject[i][j]["value"]) {
+                            modifiedObject[currentRow][currentCell]["value"] *= 2;
+                            modifiedObject[i][j]["value"] = 0;
                             zerosCounter += 1;
                             newCellFlag = true;
                         } else {
-                            currentValue = modifiedArray[i][j];
+                            currentValue = modifiedObject[i][j]["value"];
                             currentRow = i;
                             currentCell = j - zerosCounter;
-                            modifiedArray[i][j - zerosCounter] = currentValue;
+                            modifiedObject[i][j - zerosCounter]["value"] = currentValue;
                             if (j !== j - zerosCounter) {
-                                modifiedArray[i][j] = 0;
-                                newCellFlag = true;
+                                modifiedObject[i][j]["value"] = 0;
+                                newCellFlag = true;            
                             }
                         }
                     }
@@ -142,32 +142,32 @@ export function moveCells(field, direction) {
                 let currentRow = 0;
                 let currentCell = 0;
                 for (let j = 3; j >= 0; j--) {  
-                    if (modifiedArray[i][j] === 0) {
+                    if (modifiedObject[i][j]["value"] === 0) {
                         zerosCounter += 1;
                     }
-                    else if (currentValue === 0 && modifiedArray[i][j] !== 0) {
-                        currentValue = modifiedArray[i][j];
-                        modifiedArray[i][j + zerosCounter] = currentValue;
+                    else if (currentValue === 0 && modifiedObject[i][j]["value"] !== 0) {
+                        currentValue = modifiedObject[i][j]["value"];
+                        modifiedObject[i][j + zerosCounter]["value"] = currentValue;
                         if (zerosCounter !== 0) {
-                            modifiedArray[i][j] = 0;
+                            modifiedObject[i][j]["value"] = 0;
                             newCellFlag = true;
                         }
                         currentRow = i;
                         currentCell = j + zerosCounter;
                     }
-                    else if (currentValue !== 0 && modifiedArray[i][j] !== 0) {
-                        if (currentValue === modifiedArray[i][j]) {
-                            modifiedArray[currentRow][currentCell] *= 2;
-                            modifiedArray[i][j] = 0;
+                    else if (currentValue !== 0 && modifiedObject[i][j]["value"] !== 0) {
+                        if (currentValue === modifiedObject[i][j]["value"]) {
+                            modifiedObject[currentRow][currentCell]["value"] *= 2;
+                            modifiedObject[i][j]["value"] = 0;
                             zerosCounter += 1;
                             newCellFlag = true;
                         } else {
-                            currentValue = modifiedArray[i][j];
+                            currentValue = modifiedObject[i][j]["value"];
                             currentRow = i;
                             currentCell = j + zerosCounter;
-                            modifiedArray[i][j + zerosCounter] = currentValue;
+                            modifiedObject[i][j + zerosCounter]["value"] = currentValue;
                             if (j !== j - zerosCounter) {
-                                modifiedArray[i][j] = 0;
+                                modifiedObject[i][j]["value"] = 0;
                                 newCellFlag = true;
                             }
                         }
@@ -178,5 +178,38 @@ export function moveCells(field, direction) {
         default:
     }
 
-    return [modifiedArray, newCellFlag]
+    if (newCellFlag) {
+        let [row, cell] = getEmptyCell(modifiedObject);
+        return addNewCell(modifiedObject, row, cell, 2);
+    }
+
+    return modifiedObject;
+}
+
+export function getEmptyCell(field) {        
+    const randomRowIndex = Math.floor(Math.random() * field.length);
+    const randomCellIndex = Math.floor(Math.random() * field[0].length);
+
+    if (field[randomRowIndex][randomCellIndex]["value"] === 0) {
+        return [randomRowIndex, randomCellIndex];
+    }
+    
+    return getEmptyCell(field);
+}
+
+export function addNewCell(field, row, cell, value) {
+    return [
+        ...field.slice(0, row), 
+        [
+            ...field[row].slice(0, cell),
+            {
+                row: row,
+                cell: cell,
+                value: value,
+                step: 0
+            },
+            ...field[row].slice(cell + 1)
+        ],
+        ...field.slice(row + 1)
+    ]
 }

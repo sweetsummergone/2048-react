@@ -1,33 +1,27 @@
 import { useCallback, useEffect, useReducer } from "react";
+import { getEmptyCell } from "../modules/modules";
 import fieldReducer from "../reducers/field";
-import { moveCells } from "../modules/modules";
 import Cell from "./Cell";
 
 function Gamefield() {
-    const [field, dispatch] = useReducer(fieldReducer, [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]]);
-    
+    const [field, dispatch] = useReducer(fieldReducer, 
+        [   [{row: 0, cell: 0, value: 0, step: 0}, {row: 0, cell: 1, value: 0, step: 0}, {row: 0, cell: 2, value: 0, step: 0}, {row: 0, cell: 3, value: 0, step: 0}],
+            [{row: 1, cell: 0, value: 0, step: 0}, {row: 1, cell: 1, value: 0, step: 0}, {row: 1, cell: 2, value: 0, step: 0}, {row: 1, cell: 3, value: 0, step: 0}],
+            [{row: 2, cell: 0, value: 0, step: 0}, {row: 2, cell: 1, value: 0, step: 0}, {row: 2, cell: 2, value: 0, step: 0}, {row: 2, cell: 3, value: 0, step: 0}],
+            [{row: 3, cell: 0, value: 0, step: 0}, {row: 3, cell: 1, value: 0, step: 0}, {row: 3, cell: 2, value: 0, step: 0}, {row: 3, cell: 3, value: 0, step: 0}]
+        ]);
+
     const handleMoveCells = useCallback(event => {
-        const [newField, isNewCellFlag] = moveCells(field, event.key);
-        
-        dispatch("setup", {newField: newField});
-        if (isNewCellFlag) {
-            generateNewCell();
-        }
+        dispatch({type: "moveCells", direction: event.key});
     });
 
-    function getEmptyCell() {        
-        const randomRowIndex = Math.floor(Math.random() * field.length);
-        const randomCellIndex = Math.floor(Math.random() * field[0].length);
-
-        if (field[randomRowIndex][randomCellIndex] === 0) {
-            return [randomRowIndex, randomCellIndex];
-        }
-        return getEmptyCell();
+    function generateNewCell() {
+        const [row, cell] = getEmptyCell(field);
+        dispatch({type: "addNewCell", row: row, cell: cell, value: 2});
     }
 
-    function generateNewCell() {
-        const [row, cell] = getEmptyCell();
-        dispatch({type: "addNewCell", row: row, cell: cell, value: 2});
+    function animate() {
+        dispatch({type: "moveCells", direction: "bottom"});
     }
 
     useEffect(() => {
@@ -46,8 +40,8 @@ function Gamefield() {
         <div className="gamefield">
             {field.map((row, x) => (
                 <div className="gamefield__row" key={x}>
-                    {row.map((value, y) => (
-                        <Cell key={x+""+y} value={value} />
+                    {row.map((element, y) => (
+                        <Cell key={x+""+y} value={element["value"]}></Cell>
                     ))}
                 </div>
             ))}

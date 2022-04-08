@@ -1,17 +1,13 @@
+import { moveCells, addNewCell } from "../modules/modules";
+
 const fieldReducer = (state, action) => {
-    switch(action.type) {
+    switch (action.type) {
         case "addNewCell": {
-            return [...state.slice(0, action.row), 
-                [
-                    ...state[action.row].slice(0, action.cell),
-                    action.value,
-                    ...state[action.row].slice(action.cell + 1)
-                ],
-                ...state.slice(action.row + 1)];
+            return addNewCell(state, action.row, action.cell, action.value);
         }
 
-        case "setup": {
-            return action.newField;
+        case "moveCells": {
+            return moveCells(state, action.direction);
         }
 
         default:
