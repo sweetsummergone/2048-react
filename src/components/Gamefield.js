@@ -13,9 +13,44 @@ function Gamefield() {
 
     const [direction, setDirection] = useState(null);
 
+    let startX = 0;
+    let startY = 0;
+
     const handleMoveCells = useCallback(event => {
         setDirection(getDirection(event.key));
         dispatch({type: "moveCells", direction: event.key});
+    });
+
+    const handleMoveCellsTouchStart = useCallback(event => {
+        startX = event.changedTouches[0].screenX;
+        startY = event.changedTouches[0].screenY;
+    });
+
+    const handleMoveCellsTouchEnd = useCallback(event => {
+        const diffX = event.changedTouches[0].screenX - startX;
+        const diffY = event.changedTouches[0].screenY - startY;
+        const ratioX = Math.abs(diffX / diffY);
+        const ratioY = Math.abs(diffY / diffX);
+        const absDiff = Math.abs(ratioX > ratioY ? diffX : diffY);
+
+        // Ignore small movements.
+        if (absDiff < 30) {
+            return;
+        }
+
+        if (ratioX > ratioY) {
+            if (diffX >= 0) {
+                dispatch({type: "moveCells", direction: "Right"});
+            } else {
+                dispatch({type: "moveCells", direction: "Left"});
+            }
+        } else {
+            if (diffY >= 0) {
+                dispatch({type: "moveCells", direction: "Down"});
+            } else {
+                dispatch({type: "moveCells", direction: "Up"});
+            }
+        }
     });
 
     function generateNewCell() {
@@ -30,10 +65,15 @@ function Gamefield() {
 
     useEffect(() => {
         window.addEventListener("keydown", handleMoveCells);
+        window.addEventListener("touchstart", handleMoveCellsTouchStart);
+        window.addEventListener("touchend", handleMoveCellsTouchEnd);
+
         return () => {
             window.removeEventListener("keydown", handleMoveCells);
+            window.removeEventListener("touchstart", handleMoveCellsTouchStart);
+            window.removeEventListener("touchend", handleMoveCellsTouchEnd);
         };
-    }, [handleMoveCells]);
+    }, [handleMoveCells, handleMoveCellsTouchStart, handleMoveCellsTouchEnd]);
 
     return (
         <>
