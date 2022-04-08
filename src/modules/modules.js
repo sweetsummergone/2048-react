@@ -200,6 +200,7 @@ export function moveCells(field, direction) {
             }
             break;
         default:
+            break;
     }
 
     if (newCellFlag) {
@@ -230,7 +231,7 @@ export function addNewCell(field, row, cell, value) {
                 row: row,
                 cell: cell,
                 value: value,
-                step: 0
+                step: "appear"
             },
             ...field[row].slice(cell + 1)
         ],
